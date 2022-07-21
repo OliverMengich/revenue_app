@@ -1,0 +1,23 @@
+{
+  "name": "revenue_collection_project_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "olivermengich",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.6"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
