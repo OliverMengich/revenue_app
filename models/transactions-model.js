@@ -14,13 +14,12 @@ const transactionSchema = new mongoose.Schema({
         required: true
     },
     paid: {
-        type: Bool,
+        type: Boolean,
         required: true,
         default: false
     },
-    transactionId: {
+    bankIdVerification: {
         type: String,
-        required: true,
         default: ""
     }
 },{

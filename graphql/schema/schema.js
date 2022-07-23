@@ -4,14 +4,14 @@ module.exports = buildSchema(`
         _id: ID!
         name: String!
         email: String!
-        password: String!
+        password: String
         phoneNumber: String!
         IDNumber: Int!
         age: Int!
         role: String!
         dateOfBirth: String!
         imageUrl: String!
-        transactions: Transaction
+        transactionsId: ID
     }
     type Admin{
         _id: ID!
@@ -19,6 +19,7 @@ module.exports = buildSchema(`
         email: String!
         phoneNumber: String!
         StaffID: Int!
+        password: String!
         role: String!
     }
     type Transaction{
@@ -28,7 +29,7 @@ module.exports = buildSchema(`
         createdAt: String!
         updatedAt: String!
         dueDate: String!
-        transactionId: String!
+        bankIdVerification: String
     }
     input UserInput{
         name: String!
@@ -38,16 +39,18 @@ module.exports = buildSchema(`
         age: Int!
         dateOfBirth: String!
         imageUrl: String!
+        password: String!
     }
     input AdminInput{
-        role: String!
+        name: String!
+        email: String!
+        phoneNumber: String!
         StaffID: Int!
         password: String
     }
     input TransactionsInput{
         to: ID!
         amount: Float!
-        createdAt: String!
         dueDate: String!
     }
     type AuthData{
@@ -66,7 +69,7 @@ module.exports = buildSchema(`
     type RootMutation{
         createUser(userInput: UserInput): User!
         createTransaction(transaction: TransactionsInput): Transaction!
-        makeTransaction(transactionId: ID!): Transaction!
+        makeTransaction(transactionId: ID!,bankIdVerification: String!): Transaction!
         createAdmin(adminInput: AdminInput): Admin!
     }
     schema{

@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         unique: true,
     },
     age:{
-        type: Int,
+        type: Number,
         required: true,
     },
     role:{
@@ -40,9 +40,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    transactions: {
+    transactionsId: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'transactions'
-    }
+    }]
 });
 module.exports = mongoose.model("Users",userSchema);
