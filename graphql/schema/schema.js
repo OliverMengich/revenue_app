@@ -11,7 +11,7 @@ module.exports = buildSchema(`
         role: String!
         dateOfBirth: String!
         imageUrl: String!
-        transactionsId: ID
+        transactionsId: [Transaction]
     }
     type Admin{
         _id: ID!
@@ -24,7 +24,7 @@ module.exports = buildSchema(`
     }
     type Transaction{
         _id: ID!
-        to: ID!
+        to: User!
         amount: Float!
         createdAt: String!
         updatedAt: String!
@@ -46,7 +46,7 @@ module.exports = buildSchema(`
         email: String!
         phoneNumber: String!
         StaffID: Int!
-        password: String
+        password: String!
     }
     input TransactionsInput{
         to: ID!
@@ -62,7 +62,7 @@ module.exports = buildSchema(`
         getusers: [User!]!
         getuser(userId: String!): User!
         getTransactions: [Transaction!]!
-        getTransaction(transactionId: String!): Transaction!
+        getTransaction(transactionId: ID!): Transaction!
         login(IDNumber: Int!, password: String!): AuthData!
         adminlogin(StaffID: Int!, password: String!, role: String): AuthData
     }

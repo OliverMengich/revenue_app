@@ -3,14 +3,33 @@ const User = require('../../models/user-model');
 const Transaction = require('../../models/transactions-model');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
-const returnTransaction = (transactionId) => {
-    const transaction = Transaction.findById(transactionId);
-    return {
+const jwt = require('jsonwebtoken');
+const findUser = async (id) =>{
+    const user = await User.findById(id);
+    if(!user){
+        throw new Error("Invalid User Id")
+    }
+    return{
+        ...user._doc,
+        password: null,
+    }
+}
+const fetchTransaction = async (id)=>{
+    // console.log(typeof(id))
+    const transaction = await Transaction.findById(id);
+    if(!transaction){
+        throw new Error("No transaction found");
+    }
+    // console.log(transaction.dueDate)
+    // return transaction;
+    return returnTransaction(transaction);
+}
+const returnTransaction =  (transaction) =>{
+    return{
         ...transaction._doc,
-        _id: transaction.id,
-        createdAt: new Date(transaction._doc.createdAt).toISOString(),
-        updatedAt: new Date(transaction._doc.updatedAt).toISOString()
-    };
+        dueDate: new Date(transaction.dueDate).toISOString(),
+        to: findUser.bind(this, transaction.to.toString())
+    }
 }
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -27,18 +46,46 @@ module.exports = {
         return users.map(user=>{
             return {
                 ...user._doc,
-            
+                password: null,
+                transactionsId: user._doc.transactionsId.map(transactionId=>{
+                    return fetchTransaction(transactionId.toString())
+                })
             }
         })
     },
     getuser:(args) =>{
-        return User.findById(args.userId);
+        return User.findById(args.userId)
+        .then(user=>{
+            if(!user){
+                throw new Error("no user found");
+            }
+            // console.log(user._doc.transactionsId[0].toString())
+            return{
+                ...user._doc,
+                transactionsId: user._doc.transactionsId.map(transactionId=>{
+                    return fetchTransaction(transactionId.toString())
+                })
+            }
+        })
     },
-    getTransactions:() =>{
-        return Transaction.find({});
+    getTransactions: async () =>{
+        const transactions  = await Transaction.find()
+        if(!transactions){
+            throw new Error("No transactions found");
+        }
+        return transactions.map(transaction=>{
+            return returnTransaction(transaction)
+        })
     },
-    getTransaction:(args) =>{
-        return Transaction.findById(args.transactionId);
+    getTransaction: async (args) =>{
+        const transaction = await Transaction.findById(args.transactionId);
+        if(!transaction){
+            throw new Error("Transaction not found")
+        }
+        return {
+            ...transaction._doc,
+            to: findUser.bind(this, transaction._doc.to)
+        }
     },
     login: async({IDNumber, password}) =>{
         const user = await User.findOne({IDNumber: IDNumber});
@@ -119,8 +166,8 @@ module.exports = {
             dueDate: args.transaction.dueDate,
         })
         const res = await newTransaction.save()
-        // console.log(user)
         await user.transactionsId.push(res.id);
+        await user.save();
         return {...res._doc,dueDate: new Date(res._doc.dueDate).toISOString()}
     },
     makeTransaction: async({transactionId})=>{
@@ -133,36 +180,23 @@ module.exports = {
 
         })
     },
-    createAdmin: async ({name, email,phoneNumber,StaffID, imageUrl})=>{
-        const checkAdmin= AdminModel.findOne({StaffID});
-        if(checkAdmin){
-            throw new Error('User already exists');
-        }
-        const hashedPassword = await bcrypt.hash(password, 12);
-        if(!hashedPassword){
-            throw new Error('Error hashing password');
-        }
-        upload.single('user_image')
-        .then(function (file) {
-            console.log(file.path);
-            return file.path;
-        }).then(filepath=>{
+    createAdmin: async (args)=>{
+        try {
+            const checkAdmin= await AdminModel.findOne({StaffID: args.adminInput.StaffID});
+            if(checkAdmin){
+                throw new Error('Admin already exists');
+            }
+            const hashedPassword = await bcrypt.hash(args.adminInput.password, 12);
+            if(!hashedPassword){
+                throw new Error('Error hashing password');
+            }
             const admin = new AdminModel({
-                name: name,
-                email: email,
-                phoneNumber: phoneNumber,
-                StaffID: StaffID,
-                password: hashedPassword,
-                imageUrl: filepath
+                ...args.adminInput
             });
-            return admin.save();
-        })
-        .then(result=>{
-            console.log(result)
-            return {...result._doc, password: null, id: result.id}
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+            await admin.save()
+            return { ...admin._doc, id:admin.id,password: null}
+        } catch (error) {
+            throw error;
+        }
     }
 }
