@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 // const graphqlSchema = require('./graphql/schema/schema');
 const usersSchema = require('./graphql/schema/users-schema');
-const adminSchema = require('./graphql/schema/admins-schema');
+const adminsSchema = require('./graphql/schema/admins-schema');
 // const graphqlResolver = require('./graphql/resolvers/resolvers');
 const{ usersResolver, adminsResolver} = require('./graphql/resolvers/resolvers')
 const app = express();
@@ -14,7 +14,7 @@ app.get('/',(req,res,next)=>{
     res.send("Backend server running");
 });
 app.use('/admins',graphqlHTTP({
-    schema: adminSchema,
+    schema: adminsSchema,
     rootValue: adminsResolver,
     graphiql: true
 }));
@@ -23,6 +23,11 @@ app.use('/users',graphqlHTTP({
     rootValue: usersResolver,
     graphiql: true
 }));
+// app.use('/admins',graphqlHTTP({
+//     schema: graphqlSchema,
+//     rootValue: graphqlResolver,
+//     graphiql: true
+// }));
 mongoose.connect('mongodb://localhost/Rev_db',{
     useNewUrlParser: true
 })

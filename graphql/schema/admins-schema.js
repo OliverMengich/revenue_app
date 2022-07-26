@@ -58,7 +58,7 @@ module.exports = buildSchema(`
         token: String
         tokenExpiration: Int!
     }
-    type RootQuery{
+    type adminsQuery{
         getusers: [User!]!
         getuser(userId: String!): User!
         getTransactions: [Transaction!]!
@@ -66,14 +66,14 @@ module.exports = buildSchema(`
         login(IDNumber: Int!, password: String!): AuthData!
         adminlogin(StaffID: Int!, password: String!, role: String): AuthData
     }
-    type RootMutation{
+    type adminsMutation{
         createUser(userInput: UserInput): User!
         createTransaction(transaction: TransactionsInput): Transaction!
         makeTransaction(transactionId: ID!,bankIdVerification: String!): Transaction!
         createAdmin(adminInput: AdminInput): Admin!
     }
     schema{
-        query: RootQuery
-        mutation: RootMutation
+        query: adminsQuery
+        mutation: adminsMutation
     }
 `)
