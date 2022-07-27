@@ -1,11 +1,10 @@
 const express = require('express');
 const {graphqlHTTP} = require('express-graphql');
 const mongoose = require('mongoose');
-
-// const graphqlSchema = require('./graphql/schema/schema');
+//define the users schema
 const usersSchema = require('./graphql/schema/users-schema');
 const adminsSchema = require('./graphql/schema/admins-schema');
-// const graphqlResolver = require('./graphql/resolvers/resolvers');
+// add the resolvers 
 const{ usersResolver, adminsResolver} = require('./graphql/resolvers/resolvers')
 const app = express();
 app.use(express.static(__dirname + '/graphql'));
@@ -23,11 +22,6 @@ app.use('/users',graphqlHTTP({
     rootValue: usersResolver,
     graphiql: true
 }));
-// app.use('/admins',graphqlHTTP({
-//     schema: graphqlSchema,
-//     rootValue: graphqlResolver,
-//     graphiql: true
-// }));
 mongoose.connect('mongodb://localhost/Rev_db',{
     useNewUrlParser: true
 })

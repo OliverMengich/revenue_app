@@ -1,4 +1,4 @@
-const { User, Transaction, jwt, bcrypt, multer} = require('./essentials');
+const { User, Transaction, jwt, bcrypt} = require('./essentials');
 const {upload,fetchTransaction} = require('./utils');
 module.exports= {
     login: async({IDNumber, password}) =>{

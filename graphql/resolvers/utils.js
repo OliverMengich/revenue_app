@@ -1,4 +1,4 @@
-const { User, Transaction, jwt, bcrypt, multer} = require('./essentials');
+const { User, Transaction, multer} = require('./essentials');
 const findUser = async (id) =>{
     const user = await User.findById(id);
     if(!user){
