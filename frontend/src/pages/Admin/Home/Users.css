@@ -1,0 +1,33 @@
+.body-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+.users__list{
+    border: 1px solid blue;
+    margin: 2rem;
+    width: 20rem;
+    padding: 10px;
+    border-radius: 1rem;
+    cursor: pointer;
+    text-align: center;
+    
+}
+.users__list:hover{
+    box-shadow: 12px 12px rgb(216, 204, 204);
+}
+.users__list img{
+    max-height: 15rem;
+    width: 100%;
+    border-radius: 1rem;
+}
+.users__items{
+    margin: 10px;
+}
+.btn{
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
+    background-color: rgb(13, 13, 124);;
+    color: white;
+}

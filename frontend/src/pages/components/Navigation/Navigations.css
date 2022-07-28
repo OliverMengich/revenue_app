@@ -1,0 +1,27 @@
+header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: rgb(13, 13, 124);
+    color: white;
+}
+header .navigation ul{
+    list-style: none;
+    display: flex;
+}
+.navigation ul li{
+    margin: 10px;
+    cursor: pointer;
+}
+.navigation ul a{
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+.navigation ul a:hover,
+.navigation ul a:active{
+    background: white;
+    color: black;
+    padding: .5rem;
+    border-radius: .5rem;
+}

@@ -1,0 +1,16 @@
+.body-contents{
+    display: flex;
+    border: 1px solid blue;
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+.body-contents span{
+    background-color: red;
+    padding: .2rem;
+    border-radius: 10px;
+    /* background-color: rgb(44, 228, 44); */
+}
