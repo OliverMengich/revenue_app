@@ -1,6 +1,7 @@
 import React from "react";
 import './login.css';
-import MainNavigation from "../../components/Navigation/Navigations";
+// import MainNavigation from "../../../components/Navigation/Navigations";
+import MainNavigation from "../../../components/Navigation/Navigations";
 class  Login extends React.Component{
     
     loginSubmitHandler = async (event)=>{
@@ -23,8 +24,8 @@ class  Login extends React.Component{
                     <form onSubmit={this.loginSubmitHandler}>
                         <div className="user-details">
                             <div className="input-box">
-                                <span className="details">Staff ID</span>
-                                <input type="number" placeholder="Enter Staff ID No." required />
+                                <span className="details">ID Number</span>
+                                <input type="number" placeholder="Enter number" required />
                             </div>
                             <div className="input-box">
                                 <span className="details">Password</span>

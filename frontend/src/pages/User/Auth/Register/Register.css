@@ -4,23 +4,15 @@
     box-sizing: border-box;
     font-family: 'Poppins',sans-serif;
 } 
-body{
-    display: flex;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg,#71b7e6, #9b59b6);
-    background-color: blue;
-    padding: 10px;
-}
-
 .register-container{
+    display: flex;
+    margin: auto;
     max-width: 800px;
-    width: 100%;
-    margin-top: 10rem;
-    background: #fff;
+    width: 60%;
+    align-self: center;
+    align-items: center;
+    text-align: center;
     padding: 25px 30px;
-    border-radius: 5px;
 }
 .register-container .title{
     font-size: 25px;
