@@ -20,7 +20,12 @@ const mainNavigation = (props)=>{
                 </ul>
             </nav>
             <div className="user">
-                <h3>UserLogo</h3>
+                <button onClick={props.onSignUp} className="btn">
+                    <Link to='/signup'>Signup</Link>
+                </button>
+                <button onClick={props.onLogin} className="btn">
+                    <Link to='/login'>Login</Link>
+                </button>
             </div>
         </header>
     )

@@ -25,3 +25,25 @@ header .navigation ul{
     padding: .5rem;
     border-radius: .5rem;
 }
+.user{
+    display: flex;
+    align-items: center;
+}
+.user .btn{
+    background: rgb(53, 53, 211);
+    color: white;
+    /* padding: .5rem; */
+    max-width: 100px;
+    border-radius: .5rem;
+    cursor: pointer;
+}
+.user .btn a{
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+.user .btn:hover,
+.user .btn:active{
+    background: white;
+    color: black;
+}

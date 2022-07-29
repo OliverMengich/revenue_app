@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+// import {Link} from "react-router-dom";
 import MainNavigation from "../../components/Navigation/Navigations";
 import './Users.css';
 import Modal from "../../components/modal/Modal";
@@ -22,10 +23,16 @@ class Home extends Component{
         //navigate to a page, pass in the users ID
 
     }
+    signUpHandler =()=>{
+        this.props.history.push('/signup');
+    }
+    LoginHandler =()=>{
+        this.props.history.push('/login');
+    }
     render() {
         return(
             <div>
-                <MainNavigation/>
+                <MainNavigation />
                 
                 <div className="body-container">
                     <div className="users__list">
