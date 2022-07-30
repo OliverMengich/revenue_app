@@ -2,12 +2,22 @@ import React from "react";
 import './Register.css';
 
 import MainNavigation from "../../../components/Navigation/Navigations";
+import ConfirmPhoneNumber from "../ConfirmPhoneNumber/confirm-phonenumber";
 class  Register extends React.Component{
     constructor(props){
         super(props);
         this.video = React.createRef()
         this.canvas = React.createRef()
         // this.imageFile = React.createRef()
+        this.surname =React.createRef();
+        this.othernames =React.createRef();
+        this.idnumber =React.createRef();
+        this.email =React.createRef();
+        this.phonenumber =React.createRef();
+        this.age =React.createRef();
+        this.genderselect =React.createRef();
+        this.password = React.createRef();
+        this.confirmpassword = React.createRef()
     }
     state={
         pressed: false,
@@ -34,8 +44,62 @@ class  Register extends React.Component{
     setImageFileValHandler = (event) =>{
         console.log(event.target.value)
     }
+    confirmPhoneNumberHandler = async (phoneNumber)=>{
+        //send a request to the backend to verify the phonenumber
+        console.log(phoneNumber)
+        let requestBody={
+            querry:`
+                query{
+                    verifyPhoneNumber(phoneNumber: ${phoneNumber}){
+                        message
+                        randomNumber
+                        phoneNumber
+                    }
+                }
+            `
+        }
+        fetch('http://localhost:8000/users',{
+            method:'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res=>{
+            if(res.status !== 200 && res.status !==201){
+                throw new Error("Failed");
+            }
+            return res.json();
+        }).then(resData=>{
+            console.log(resData);
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
     registerSubmitHandler = async (event)=>{
         event.preventDefault();
+        const surname = this.surname.current.value;
+        const othernames = this.othernames.current.value;
+        const idnumber = this.idnumber.current.value;
+        const phoneNumber = this.phonenumber.current.value;
+        const email = this.email.current.value;
+        const genderselect = this.genderselect.current.value;
+        const password =this.password.current.value;
+        const confirmpassword = this.confirmpassword.current.value;
+        //setup the prop types
+        if(password !== confirmpassword){
+            return new Error("Passwords don't Match")
+        }
+        <ConfirmPhoneNumber 
+            phoneNumber={phoneNumber} 
+            surname={surname}
+            othernames={othernames}
+            idnumber={idnumber}
+            email={email}
+            genderselect={genderselect}
+            password={password}
+            confirmPhoneNumberHandler ={this.confirmPhoneNumberHandler}/>
         console.log(event.target.value)
     }
     render(){
@@ -49,27 +113,27 @@ class  Register extends React.Component{
                         <div className="user-details">
                             <div className="input-box">
                                 <span className="details">SurName</span>
-                                <input  type="text" placeholder="Kenyatta" required />
+                                <input ref={this.surname}  type="text" placeholder="Kenyatta" required />
                             </div>
                             <div className="input-box">
                                 <span className="details">Other Names</span>
-                                <input  type="text" placeholder="Uhuru Muigai" required />
+                                <input ref={this.othernames} type="text" placeholder="Uhuru Muigai" required />
                             </div>
                             <div className="input-box">
                                 <span className="details">ID Number</span>
-                                <input type="number" placeholder="Enter number" required />
+                                <input ref={this.idnumber} type="number" placeholder="Enter number" required />
                             </div>
                             <div className="input-box">
                                 <span className="details">Email</span>
-                                <input type="text" placeholder="Enter your email" required />
+                                <input ref={this.email} type="text" placeholder="Enter your email" required />
                             </div>
                             <div className="input-box">
                                 <span className="details">Phone Number</span>
-                                <input type="text" pattern="[0-9]{4}[0-9]{6}" maxLength="10" placeholder="e.g 0710235787" />    
+                                <input ref={this.phonenumber} type="text" pattern="[0-9]{4}[0-9]{6}" maxLength="10" placeholder="e.g 0710235787" />    
                             </div>
                             <div className="input-box">
                                 <span className="details">Age</span>
-                                <input type="number" placeholder="Enter your age" required />
+                                <input ref={this.age} type="number" placeholder="Enter your age" required />
                             </div>
                             <div className="input-box">
                                 <span className="details">Image</span>
@@ -88,7 +152,7 @@ class  Register extends React.Component{
                             </div>
                             <div className="input-box">
                                 <label  className="details">Gender</label>
-                                <select id="gender">
+                                <select ref={this.genderselect} id="gender">
                                     <option value="male">MALE</option>
                                     <option value="female">FEMALE</option>
                                     <option value="other">OTHER</option>
@@ -96,12 +160,12 @@ class  Register extends React.Component{
                             </div>
                             <div className="input-box">
                                 <span className="details">Password</span>
-                                <input type="text" placeholder="Enter your password" required />
+                                <input ref={this.password} type="text" placeholder="Enter your password" required />
                             </div>
                             
                             <div className="input-box">
                                 <span className="details">Confirm Password</span>
-                                <input type="text" placeholder="confirm password" required />
+                                <input ref={this.confirmpassword} type="text" placeholder="confirm password" required />
                             </div>
                         </div>
                         <input className="button" type="submit" value="Register" />

@@ -37,9 +37,15 @@ module.exports = buildSchema(`
         token: String
         tokenExpiration: Int!
     }
+    type Verification{
+        message: String
+        randomNumber: Int!
+        phoneNumber: String
+    }
     type RootQuery{
         login(IDNumber: Int!, password: String!): AuthData!
         getuserTransactions(userId: ID!): Transaction!
+        verifyPhoneNumber(phoneNumber: String!): Verification
     }
     type RootMutation{
         createUser(userInput: UserInput): User!

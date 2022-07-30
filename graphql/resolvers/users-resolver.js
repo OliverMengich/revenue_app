@@ -1,5 +1,11 @@
 const { User, Transaction, jwt, bcrypt} = require('./essentials');
 const {upload,fetchTransaction} = require('./utils');
+const credentials = {
+    apiKey: 'YOUR API KEY',// use your sandbox app API key for development in the test environment
+    username: 'YOUR USERNAME',// use 'sandbox' for development in the test environment
+};
+const Africastalking = require('africastalking')(credentials);
+const sms = Africastalking.SMS;
 module.exports= {
     login: async({IDNumber, password}) =>{
         const user = await User.findOne({IDNumber: IDNumber});
@@ -17,6 +23,31 @@ module.exports= {
             token: token,
             tokenExpiration: tokenExpiration
         }
+    },
+    //send message to user's phone number, generate a random number between 100000 and 999999 
+    // return the random number to the user
+    verifyPhoneNumber: ({phoneNumber}) =>{
+        const randomNumber = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+        const options = {
+            to: phoneNumber,
+            message: 'Your verification code is ' +randomNumber+ '.'
+        }
+        sms.send(options)
+        .then(response => {
+            console.log(response);
+            return{
+                message: 'Message sent',
+                randomNumber: randomNumber,
+                phoneNumber: phoneNumber
+            }
+        })
+        .catch(error => {
+            return{
+                message: error,
+                randomNumber: null,
+                phoneNumber: phoneNumber
+            }
+        })
     },
     createUser: async (args) => {
         return User.findOne({

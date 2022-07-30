@@ -15,7 +15,7 @@
 .users__list:hover{
     box-shadow: 12px 12px rgb(216, 204, 204);
 }
-.user__list img{
+.users__list img{
     max-height: 15rem;
     width: 100%;
     border-radius: 1rem;
