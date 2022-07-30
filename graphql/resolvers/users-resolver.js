@@ -1,8 +1,8 @@
 const { User, Transaction, jwt, bcrypt} = require('./essentials');
 const {upload,fetchTransaction} = require('./utils');
 const credentials = {
-    apiKey: 'YOUR API KEY',// use your sandbox app API key for development in the test environment
-    username: 'YOUR USERNAME',// use 'sandbox' for development in the test environment
+    apiKey: 'c57af6b580ada6bfa88a99b74293122931cb9ab4e54d53571b1992bbd066a681',// use your sandbox app API key for development in the test environment
+    username: 'oliverViolin',// use 'sandbox' for development in the test environment
 };
 const Africastalking = require('africastalking')(credentials);
 const sms = Africastalking.SMS;

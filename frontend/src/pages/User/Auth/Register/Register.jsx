@@ -1,4 +1,5 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 import './Register.css';
 
 import MainNavigation from "../../../components/Navigation/Navigations";
@@ -21,7 +22,10 @@ class  Register extends React.Component{
     }
     state={
         pressed: false,
-        imageFileValue: ''
+        imageFileValue: '',
+        sendingMessageStatus: false,
+        verificationCode: null,
+        redirectToLogin: false
     }
     captureImageHandler = async () =>{
         if(this.state.pressed === false){
@@ -44,7 +48,7 @@ class  Register extends React.Component{
     setImageFileValHandler = (event) =>{
         console.log(event.target.value)
     }
-    confirmPhoneNumberHandler = async (phoneNumber)=>{
+    generateCodeHandler = async (phoneNumber)=>{
         //send a request to the backend to verify the phonenumber
         console.log(phoneNumber)
         let requestBody={
@@ -72,10 +76,23 @@ class  Register extends React.Component{
             return res.json();
         }).then(resData=>{
             console.log(resData);
+            this.setState({ verificationCode: resData.data.verifyPhoneNumber.randomNumber})
         })
         .catch(err=>{
             console.log(err)
         })
+    }
+    confirmNumberPassedHandler = (event, passedCode) =>{
+        event.preventDefault();
+        if(passedCode === this.state.verificationCode){
+            //redirect user to login page
+            this.setState({
+                redirectToLogin: true,
+            })
+        }else{
+            alert("Verification code passed is not correct :( try again")
+            throw new Error("Verification Code Error")
+        }
     }
     registerSubmitHandler = async (event)=>{
         event.preventDefault();
@@ -87,9 +104,10 @@ class  Register extends React.Component{
         const genderselect = this.genderselect.current.value;
         const password =this.password.current.value;
         const confirmpassword = this.confirmpassword.current.value;
+        console.log(surname, othernames,idnumber,)
         //setup the prop types
         if(password !== confirmpassword){
-            return new Error("Passwords don't Match")
+            throw new Error("Passwords don't Match")
         }
         <ConfirmPhoneNumber 
             phoneNumber={phoneNumber} 
@@ -99,7 +117,12 @@ class  Register extends React.Component{
             email={email}
             genderselect={genderselect}
             password={password}
-            confirmPhoneNumberHandler ={this.confirmPhoneNumberHandler}/>
+            successMessage = "Verification code sent"
+            failureMessage = "Failed! kindly check the number you entered"
+            verificationCode = {this.state.verificationCode}
+            sendingMessageStatus = {this.state.sendingMessageStatus}
+            generateCodeHandler = {this.generateCodeHandler}
+            confirmNumberPassedHandler ={this.confirmNumberPassedHandler}/>
         console.log(event.target.value)
     }
     render(){
@@ -172,6 +195,9 @@ class  Register extends React.Component{
                     </form>
                 </div>
             </div>
+            {
+                this.state.redirectToLogin ? <Navigate to='/login' /> : ''
+            }
         </React.Fragment>
     )}
 }
