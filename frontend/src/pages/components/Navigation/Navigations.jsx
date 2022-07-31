@@ -2,6 +2,7 @@ import React from "react";
 import './Navigations.css'
 import { Link } from "react-router-dom";
 const mainNavigation = (props)=>{
+    
     return(
         <header>
             <h1>Revenue App</h1>
@@ -21,10 +22,10 @@ const mainNavigation = (props)=>{
             </nav>
             <div className="user">
                 <button onClick={props.onSignUp} className="btn">
-                    <Link to='/signup'>Signup</Link>
+                    <Link to='/users/register'>Signup</Link>
                 </button>
                 <button onClick={props.onLogin} className="btn">
-                    <Link to='/login'>Login</Link>
+                    <Link to='/users/login'>Login</Link>
                 </button>
             </div>
         </header>

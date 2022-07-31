@@ -1,9 +1,11 @@
 const { User, Transaction, jwt, bcrypt} = require('./essentials');
+// require('dotenv')
 const {upload,fetchTransaction} = require('./utils');
+
 const credentials = {
-    apiKey: 'c57af6b580ada6bfa88a99b74293122931cb9ab4e54d53571b1992bbd066a681',// use your sandbox app API key for development in the test environment
-    username: 'oliverViolin',// use 'sandbox' for development in the test environment
-};
+    apiKey: 'your apikey',
+    username: 'you username'
+}
 const Africastalking = require('africastalking')(credentials);
 const sms = Africastalking.SMS;
 module.exports= {
@@ -26,15 +28,17 @@ module.exports= {
     },
     //send message to user's phone number, generate a random number between 100000 and 999999 
     // return the random number to the user
-    verifyPhoneNumber: ({phoneNumber}) =>{
+    verifyPhoneNumber: async ({phoneNumber}) =>{
         const randomNumber = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+        let receipient = "+254"+ phoneNumber.slice(1);
         const options = {
-            to: phoneNumber,
+            to: [receipient],
             message: 'Your verification code is ' +randomNumber+ '.'
         }
-        sms.send(options)
+        return sms.send(options)
         .then(response => {
-            console.log(response);
+            return response;
+        }).then(()=>{
             return{
                 message: 'Message sent',
                 randomNumber: randomNumber,
@@ -42,6 +46,7 @@ module.exports= {
             }
         })
         .catch(error => {
+            console.log(error);
             return{
                 message: error,
                 randomNumber: null,

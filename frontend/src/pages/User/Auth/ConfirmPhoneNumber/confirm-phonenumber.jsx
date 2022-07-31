@@ -1,42 +1,98 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './confirm-phonenumber.css';
 import MainNavigation from '../../../components/Navigation/Navigations';
-
-const ConfirmPhoneNumber = (props)=>{
-    const [passedCode, setPassedCode] = useState(null);
-    return (
-        <React.Fragment>
-            <MainNavigation />
-            <div className="register-container">
-                <div className='information__detail'>
-                    <h2>Verify that {props.phoneNumber} is your phonenumber</h2>
-                    <p>Click on the button below</p>
-                    {
-                        (props.sendingMessageStatus) &&( 
-                            <p className={props.verificationCode ==null ? 'verification__status_failed': 'verification__status'}>
-                                {
-                                    props.verificationCode ==null? props.failureMessage: props.successMessage
-                                }
-                            </p>
-                        )
+import UserRegistrationContext from '../../../../context/user_registration-context';
+class ConfirmPhoneNumber extends React.Component {
+    static contextType = UserRegistrationContext;
+    async componentDidMount() {
+        await console.log(this.context)
+    }
+    state={
+        sendingMessageStatus: false,
+        verificationCode: null
+    }
+    generateCodeHandler = async (phoneNumber)=>{
+        //send a request to the backend to verify the phonenumber
+        console.log(phoneNumber)
+        let requestBody={
+            querry:`
+                query{
+                    verifyPhoneNumber(phoneNumber: ${phoneNumber}){
+                        message
+                        randomNumber
+                        phoneNumber
                     }
-                    <button onClick={props.generateCodeHandler.bind(this,props.phoneNumber)} className='button'>Generate code</button>
-                    { 
-
-                    props.verificationCode !== null? (
-                        <form onSubmit={props.confirmNumberPassedHandler.bind(this, passedCode)}>
-                            <div className='user-details'>
-                                <div className="input-box">
-                                    <span className="details">Enter generated Code here</span>
-                                    <input required type="number" value={passedCode} onChange={e=>setPassedCode(e.target.value)} placeholder="Enter Staff ID No." />
+                }
+            `
+        }
+        fetch('http://localhost:8000/users',{
+            method:'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res=>{
+            if(res.status !== 200 && res.status !==201){
+                throw new Error("Failed");
+            }
+            return res.json();
+        }).then(resData=>{
+            console.log(resData);
+            this.setState({ 
+                verificationCode: resData.data.verifyPhoneNumber.randomNumber
+            })
+        })
+        .catch(err=>{
+            console.log(err)
+        })
+    }
+    confirmNumberPassedHandler = (event, passedCode) =>{
+        event.preventDefault();
+        if(passedCode === this.state.verificationCode){
+            //redirect user to login page
+            this.setState({
+                redirectToLogin: true,
+            })
+        }else{
+            alert("Verification code passed is not correct :( try again")
+            throw new Error("Verification Code Error")
+        }
+    }
+    render(){
+        return (
+            <React.Fragment>
+                <MainNavigation />
+                <div className="register-container">
+                    <div className='information__detail'>
+                        <h2>Verify that {this.context.phoneNumber} is your phonenumber</h2>
+                        <p>Click on the button below</p>
+                        {
+                            (this.context.sendingMessageStatus) &&( 
+                                <p className={this.context.verificationCode ==null ? 'verification__status_failed': 'verification__status'}>
+                                    {
+                                        this.context.verificationCode ==null? this.context.failureMessage: this.context.successMessage
+                                    }
+                                </p>
+                            )
+                        }
+                        <button onClick={this.generateCodeHandler(this.context.phoneNumber)} className='button'>Generate code</button>
+                        {/* { 
+                        props.verificationCode !== null? (
+                            <form onSubmit={this.confirmNumberPassedHandler( passedCode)}>
+                                <div className='user-details'>
+                                    <div className="input-box">
+                                        <span className="details">Enter generated Code here</span>
+                                        <input required type="number" value={passedCode} onChange={e=>setPassedCode(e.target.value)} placeholder="Enter Staff ID No." />
+                                    </div>
                                 </div>
-                            </div>
-                            <input type="submit" value="Submit" className="button"/>
-                        </form>) : ''
-                    }
+                                <input type="submit" value="Submit" className="button"/>
+                            </form>) : ''
+                        } */}
+                    </div>
                 </div>
-            </div>
-        </React.Fragment>
-    );
+            </React.Fragment>
+        );
+    }
 }
 export default ConfirmPhoneNumber;
