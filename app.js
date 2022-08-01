@@ -1,12 +1,23 @@
 const express = require('express');
 const {graphqlHTTP} = require('express-graphql');
 const mongoose = require('mongoose');
+require('dotenv/config')
 //define the users schema
 const usersSchema = require('./graphql/schema/users-schema');
 const adminsSchema = require('./graphql/schema/admins-schema');
 // add the resolvers 
 const{ usersResolver, adminsResolver} = require('./graphql/resolvers/resolvers')
 const app = express();
+app.use(express.json());
+app.use((req,res,next)=>{
+    res.setHeader("Access-Control-Allow-Origin", "*") //only the localhost is whitelisted to access our API
+    res.setHeader("Access-Control-Allow-Methods","GET,POST,OPTIONS")// methods that can be passed to our API
+    res.setHeader("Access-Control-Allow-Headers",'Content-Type, Authorization')
+    if(req.method=="OPTIONS"){
+        return res.sendStatus(200)
+    }
+    next();
+})
 app.use(express.static(__dirname + '/graphql'));
 app.use('/uploads', express.static('uploads'));
 app.get('/',(req,res,next)=>{
@@ -22,7 +33,7 @@ app.use('/users',graphqlHTTP({
     rootValue: usersResolver,
     graphiql: true
 }));
-mongoose.connect('mongodb://localhost/Rev_db',{
+mongoose.connect(process.env.DB_URL,{
     useNewUrlParser: true
 })
 .then(()=>{

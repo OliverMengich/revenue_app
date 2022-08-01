@@ -11,13 +11,13 @@ class ConfirmPhoneNumber extends React.Component {
         sendingMessageStatus: false,
         verificationCode: null
     }
-    generateCodeHandler = async (phoneNumber)=>{
+    generateCodeHandler = ()=>{
         //send a request to the backend to verify the phonenumber
-        console.log(phoneNumber)
+        console.log(this.context.phoneNumber)
         let requestBody={
-            querry:`
+            query :`
                 query{
-                    verifyPhoneNumber(phoneNumber: ${phoneNumber}){
+                    verifyPhoneNumber(phoneNumber: "${this.context.phoneNumber}"){
                         message
                         randomNumber
                         phoneNumber
@@ -76,7 +76,7 @@ class ConfirmPhoneNumber extends React.Component {
                                 </p>
                             )
                         }
-                        <button onClick={this.generateCodeHandler(this.context.phoneNumber)} className='button'>Generate code</button>
+                        <button onClick={this.generateCodeHandler} className='button'>Generate code</button>
                         {/* { 
                         props.verificationCode !== null? (
                             <form onSubmit={this.confirmNumberPassedHandler( passedCode)}>

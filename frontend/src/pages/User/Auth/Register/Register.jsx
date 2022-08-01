@@ -30,7 +30,7 @@ class  Register extends React.Component{
         othernames: '',
         idnumber: null,
         email: '',
-        phoneNumber: '0741954425',
+        phoneNumber: '',
         age: null,
         genderselect: '',
         password: '',
@@ -106,7 +106,6 @@ class  Register extends React.Component{
                     failureMessage: "Failed! kindly check the number you entered",
                     verificationCode : this.state.verificationCode,
                     imageFileValue: this.state.imageFileValue,
-                    // setRegistrationDetails: this.setRegistrationDetails
                 }}
             >
                 {
