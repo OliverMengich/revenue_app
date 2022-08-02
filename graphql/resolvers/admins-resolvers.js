@@ -6,12 +6,39 @@ module.exports = {
     getTransactions: async () =>{
         console.log('here at getTransactions')
         const transactions  = await Transaction.find()
-        console.log(transactions);
         if(!transactions){
             throw new Error("No transactions found");
         }
         return transactions.map(transaction=>{
             return returnTransaction(transaction)
+        })
+    },
+    createUser: async (args) => {
+        return User.findOne({
+            IDNumber: args.userInput.IDNumber, 
+            phoneNumber: args.userInput.phoneNumber,
+            email: args.userInput.email
+        })
+        .then(checkuser=>{
+            if(checkuser){
+                throw new Error('User already exists');
+            }
+            return bcrypt.hash(args.userInput.password, 12);
+        })
+        .then((hashedPassword)=>{
+            if(!hashedPassword){
+                throw new Error('Error hashing password');
+            }
+            const user = new User({
+                ...args.userInput,
+            });
+            return user.save()
+        })
+        .then(result=>{
+            return { ...result._doc, id:result.id,password: null}
+        })
+        .catch(err=>{
+            throw err;
         })
     },
     createAdmin: async (args)=>{
@@ -73,11 +100,14 @@ module.exports = {
         const res = await newTransaction.save()
         await user.transactionsId.push(res.id);
         await user.save();
-        return {...res._doc,dueDate: new Date(res._doc.dueDate).toISOString()}
+        return {
+            ...res._doc,
+            dueDate: new Date(res._doc.dueDate).toISOString(),
+            to: findUser.bind(this, res._doc.to)
+        }
     },
     getusers: async (args)=>{
         const users = await User.find({});
-        console.log(users)
         return users.map(user=>{
             return {
                 ...user._doc,
@@ -94,7 +124,6 @@ module.exports = {
             if(!user){
                 throw new Error("no user found");
             }
-            // console.log(user._doc.transactionsId[0].toString())
             return{
                 ...user._doc,
                 transactionsId: user._doc.transactionsId.map(transactionId=>{

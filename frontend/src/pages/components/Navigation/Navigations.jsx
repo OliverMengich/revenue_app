@@ -12,11 +12,7 @@ const mainNavigation = (props)=>{
                         <Link to='/'>Home</Link>
                     </li>
                     <li>
-                        <Link to='/transactions'>Transactions</Link>
-                    </li>
-                    
-                    <li>
-                        <Link to='/partners'>Partners</Link>
+                        <Link to='/admins/transactions'>Transactions</Link>
                     </li>
                 </ul>
             </nav>

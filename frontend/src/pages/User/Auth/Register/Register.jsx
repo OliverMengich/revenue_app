@@ -34,6 +34,7 @@ class  Register extends React.Component{
         age: null,
         genderselect: '',
         password: '',
+        dateOfBirth: ''
     }
     captureImageHandler = async () =>{
         
@@ -49,7 +50,7 @@ class  Register extends React.Component{
             console.log(this.state)
             this.canvas.current.getContext('2d').drawImage(this.video,0,0, this.canvas.width, this.canvas.height);
             let image_data_url = await this.canvas.current.toDataURL()
-            console.log(image_data_url);
+            console.log(image_data_url.toString('base64'));
             await this.setState({imageFileValue: image_data_url, pressed: !this.state.pressed});
             console.log('State after capturing image is: ')
             console.log(this.state);
@@ -68,6 +69,7 @@ class  Register extends React.Component{
         const genderselect = this.genderselect.current.value;
         const password =this.password.current.value;
         const age = this.age.current.value;
+        const dateOfBirth = this.dateOfBirth.current.value;
         const confirmpassword = this.confirmpassword.current.value;
         console.log(surname, othernames,idnumber,phoneNumber, email,genderselect,password,confirmpassword)
         //setup the prop types
@@ -85,7 +87,8 @@ class  Register extends React.Component{
                 phoneNumber,
                 email,
                 genderselect,
-                age
+                age,
+                dateOfBirth
             }
         });
         console.log(this.state.phoneNumber)
@@ -102,6 +105,7 @@ class  Register extends React.Component{
                     email: this.state.email,
                     genderselect: this.state.genderselect,
                     password: this.state.password,
+                    dateOfBirth: this.state.dateOfBirth,
                     successMessage: "Verification code sent",
                     failureMessage: "Failed! kindly check the number you entered",
                     verificationCode : this.state.verificationCode,
@@ -132,6 +136,10 @@ class  Register extends React.Component{
                                         <div className="input-box">
                                             <span className="details">Email</span>
                                             <input ref={this.email} type="email" placeholder="Enter your email" required />
+                                        </div>
+                                        <div className="input-box">
+                                            <label htmlFor="date">Date Of Birth</label>
+                                            <input type="date" id="date" name="date" placeholder="Date of birth" ref={this.dateOfBirth}/>
                                         </div>
                                         <div className="input-box">
                                             <span className="details">Phone Number</span>

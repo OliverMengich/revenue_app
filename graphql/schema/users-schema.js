@@ -2,13 +2,14 @@ const { buildSchema } = require('graphql');
 module.exports = buildSchema(`
     type User{
         _id: ID!
-        name: String!
+        surname: String!
+        othernames: String!
         email: String!
         password: String
         phoneNumber: String!
         IDNumber: Int!
         age: Int!
-        role: String!
+        role: String
         dateOfBirth: String!
         imageUrl: String!
         transactionsId: [Transaction]
@@ -23,7 +24,8 @@ module.exports = buildSchema(`
         bankIdVerification: String
     }
     input UserInput{
-        name: String!
+        surname: String!
+        othernames: String!
         email: String!
         phoneNumber: String!
         IDNumber: Int!
@@ -39,7 +41,7 @@ module.exports = buildSchema(`
     }
     type Verification{
         message: String
-        randomNumber: Int!
+        randomNumber: Int
         phoneNumber: String
     }
     type RootQuery{

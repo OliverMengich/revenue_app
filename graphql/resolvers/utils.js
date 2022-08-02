@@ -10,14 +10,14 @@ const findUser = async (id) =>{
     }
 }
 const fetchTransaction = async (id)=>{
-    // console.log(typeof(id))
-    const transaction = await Transaction.findById(id);
-    if(!transaction){
-        throw new Error("No transaction found");
+    console.log(id);
+    try{
+        const transaction = await Transaction.findById(id);
+        console.log(transaction);
+        return returnTransaction(transaction);
+    }catch(err){
+        throw err;
     }
-    // console.log(transaction.dueDate)
-    // return transaction;
-    return returnTransaction(transaction);
 }
 const returnTransaction =  (transaction) =>{
     return{

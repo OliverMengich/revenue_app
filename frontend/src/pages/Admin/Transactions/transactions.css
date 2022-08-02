@@ -8,9 +8,15 @@
     align-items: center;
     cursor: pointer;
 }
-.body-contents span{
-    background-color: red;
-    padding: .2rem;
+.body-contents .pending{
+    background-color: rgb(243, 9, 9);
+    padding: .5rem;
+    border-radius: 10px;
+    /* background-color: rgb(44, 228, 44); */
+}
+.body-contents .paid{
+    background-color: rgb(28, 243, 9);
+    padding: .5rem;
     border-radius: 10px;
     /* background-color: rgb(44, 228, 44); */
 }

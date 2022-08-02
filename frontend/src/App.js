@@ -19,8 +19,8 @@ class App extends Component{
               <Route path='/users/register' element={<Register/>} />
               
               <Route path='/file-submit' element={<FileHandler/>} />
-              <Route path="/admin/user-detail" element={ <UserDetail/>} />
-              <Route path='/admin/transactions' element={<Transactions/>} />
+              <Route path="/admins/users/user-detail" element={ <UserDetail/>} />
+              <Route path='/admins/transactions' element={<Transactions/>} />
           </Routes>
         </BrowserRouter>
       )

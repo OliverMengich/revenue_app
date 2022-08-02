@@ -7,21 +7,80 @@ import Backdrop from "../../components/Backdrop/Backdrop";
 class Home extends Component{
     state={
         buttonClicked: false,
-        selectedUser: []
+        selectedUser: null,
+        users:[],
+        redirectToUserDetail: false
     }
-    backdropRender=()=>{
-        this.setState({
+    backdropRender= async(eventId)=>{
+        await this.setState(prevState=>{
+            let selectedUser = prevState.users.find(e=>e._id===eventId)
+            return{
+                ...prevState,
+                buttonClicked: !this.state.buttonClicked,
+                selectedUser: selectedUser
+            }
+        })
+        console.log(this.state)
+    }
+    componentDidMount(){
+        this.fetchUsers();
+    }
+    cancelModalHandler = async()=>{
+        await this.setState({
+            selectedUser: null,
             buttonClicked: !this.state.buttonClicked
         })
-    }
-    cancelModalHandler =()=>{
-        this.setState({
-            buttonClicked: !this.state.buttonClicked
-        })
+        console.log(this.state)
     }
     confirmModalHander =(userId)=>{
         //navigate to a page, pass in the users ID
-
+        console.log(userId);
+        this.setState({
+            redirectToUserDetail: true
+        })
+    }
+    fetchUsers = ()=>{
+        let requestBody;
+        requestBody={
+            query: `
+                query{
+                    getusers{
+                        _id
+                        othernames
+                        IDNumber
+                        imageUrl
+                        email
+                        transactionsId{
+                            dueDate
+                            paid
+                            amount
+                        }
+                    }
+                }
+            `
+        }
+        fetch('http://localhost:8000/admins',{
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res=>{
+            if(res.status !== 200 && res.status !==201){
+                throw new Error("Failed");
+            }
+            return res.json();
+        })
+        .then(resData=>{
+            console.log(resData)
+            this.setState({
+                users:resData.data.getusers
+            })
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
     signUpHandler =()=>{
         this.props.history.push('/signup');
@@ -33,42 +92,46 @@ class Home extends Component{
         return(
             <div>
                 <MainNavigation />
-                
                 <div className="body-container">
-                    <div className="users__list">
-                        <div className="users_image">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="user" />
-                        </div>
-                        <div className="users__items">
-                            <h1>Jane Doe</h1>
-                            <h2>37546727</h2>
-                            <h3>janedoe@gmail.com</h3>
-                        </div>
-                        <button onClick={this.backdropRender} className="btn">View Details</button>
-                    </div>
-                    <div className="users__list">
-                        <div className="users_image">
-                            <img src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="user" />
-                        </div>
-                        <div className="users__items">
-                            <h1>John Doe</h1>
-                            <h2>36546727</h2>
-                            <h3>johndoe@gmail.com</h3>
-                        </div>
-                        {
-                            this.state.buttonClicked &&(
-                                <Backdrop/>
-                            ) 
-                        }
-                        {
-                            this.state.buttonClicked &&(
-                                <Modal onConfirm={this.confirmModalHander} onCancel={this.cancelModalHandler}/>
-                            )
-                            
-                        }
+                    {
+                        this.state.users.length !== 0 ?(
+                            this.state.users.map(user=>{
+                                return(
+                                <div key={user.IDNumber} className="users__list">
+                                    <div className="users_image">
+                                        <img src={ user.imageUrl.toString() } alt={user.IDNumber} />
+                                    </div>
+                                    <div className="users__items">
+                                        <h1>{user.othernames}</h1>
+                                        <h2>{user.IDNumber}</h2>
+                                        <h3>{user.email}</h3>
+                                    </div>
+                                    <button onClick={this.backdropRender.bind(this,user._id)} className="btn">View Details</button>
+                                </div>
+                                )
+                            })
+                        ): <h1>No users found</h1>
+                    }
+                    {
+                        this.state.buttonClicked &&(
+                            <Backdrop/>
+                        ) 
+                    }
+                    {
+                        this.state.buttonClicked &&(
+                            <Modal _id={this.state.selectedUser._id} onConfirm={this.confirmModalHander} onCancel={this.cancelModalHandler}>
+                                <header className='modal__header'>
+                                    <h1>{this.state.selectedUser.othernames}</h1>
+                                </header>
+                                <section className='modal__content'>
+                                    <img src={this.state.selectedUser.imageUrl} alt="user" />            
+                                    <h3>{this.state.selectedUser.email}</h3>
+                                    <h4>Latest Transaction: <span>{this.state.selectedUser.transactionsId[0].paid? 'Paid': 'Pending'}</span></h4>
+                                </section>
+                            </Modal>
+                        )
                         
-                        <button onClick={this.backdropRender} className="btn">View Details</button>
-                    </div>
+                    }
                 </div>
             </div>
 

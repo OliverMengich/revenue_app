@@ -1,10 +1,11 @@
 .user__detail__container{
     display: flex;
     width: 100vw;
+    /* justify-content: space-between; */
 }
 .user__list{
-    /* margin: 2rem; */
-    /* width: 20rem; */
+    margin: 2rem;
+    /* width: 100%; */
     padding: 10px;
     border-radius: 1rem;
     cursor: pointer;
@@ -15,16 +16,17 @@
     width: 25rem;
     border-radius: 1rem;
 }
-.user__detail__container .user__body-contents{
+.user__detail__container .user__body_contents{
     display: flex;
     border: 1px solid blue;
     max-height: 2rem;
     width: 100%;
     margin: 10px;
     justify-content: space-between;
-    padding: 10px;
+    padding: 2rem;
     align-items: center;
 }
+
 .user__body-contents span{
     background-color: red;
     padding: .2rem;

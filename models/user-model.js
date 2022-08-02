@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
-    name:{
+    surname:{
         type:String,
+        required: true
+    },
+    othernames:{
+        type: String,
         required: true
     },
     IDNumber:{
@@ -11,7 +15,8 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        require:true,
+        required:true,
+        unique: true
     },
     password: {
         type: String,
@@ -38,7 +43,6 @@ const userSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: true,
     },
     transactionsId: [{
         type: mongoose.Schema.Types.ObjectId,

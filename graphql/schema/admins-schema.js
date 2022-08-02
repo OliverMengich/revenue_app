@@ -2,13 +2,14 @@ const { buildSchema } = require('graphql');
 module.exports = buildSchema(`
     type User{
         _id: ID!
-        name: String!
+        surname: String!
+        othernames: String!
         email: String!
         password: String
         phoneNumber: String!
         IDNumber: Int!
         age: Int!
-        role: String!
+        role: String
         dateOfBirth: String!
         imageUrl: String!
         transactionsId: [Transaction]
@@ -29,10 +30,12 @@ module.exports = buildSchema(`
         createdAt: String!
         updatedAt: String!
         dueDate: String!
+        paid: Boolean
         bankIdVerification: String
     }
     input UserInput{
-        name: String!
+        surname: String!
+        othernames: String!
         email: String!
         phoneNumber: String!
         IDNumber: Int!
