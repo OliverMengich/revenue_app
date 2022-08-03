@@ -1,4 +1,4 @@
-const { buildSchema } = require('graphql');
+const { buildSchema, GraphQLObjectType } = require('graphql');
 module.exports = buildSchema(`
     type User{
         _id: ID!

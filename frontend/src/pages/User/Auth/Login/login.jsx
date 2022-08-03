@@ -2,32 +2,33 @@ import React from "react";
 import './login.css';
 // import MainNavigation from "../../../components/Navigation/Navigations";
 import MainNavigation from "../../../components/Navigation/Navigations";
+import AuthContext from "../../../../context/auth-context";
 class  Login extends React.Component{
     constructor(props){
         super(props)
         this.idnumber = React.createRef();
         this.password = React.createRef();
     }
+    static contextType=AuthContext;
     loginSubmitHandler = async (event)=>{
         event.preventDefault();
-        console.log(event.target.value);
         const idnumber = this.idnumber.current.value;
         const password = this.password.current.value;
         //set up prop types
         if(idnumber.trim().length === 0 || password.trim().length ===0){
-            throw new Error("Passwords dont match")
+            throw new Error("Cannot be null or empty")
         }
         let requestBody;
         requestBody={
             query: `query {
-                login(email: "${idnumber}", password: "${password}"){
+                login(IDNumber: ${idnumber}, password: "${password}"){
                     userId
                     token
                     tokenExpiration
                 }
             }`
         }
-        fetch('http://localhost:8000/graphql',{
+        fetch('http://localhost:8000/users',{
             method: 'POST',
             body: JSON.stringify(requestBody),
             headers: {
@@ -40,14 +41,12 @@ class  Login extends React.Component{
             }
             return res.json();
         }).then(resData=>{
-            if(resData.data.login.token){
-                this.context.login(
-                    resData.data.login.token,
-                    // resData.data.login.userId,
-                    resData.data.login.userId,
-                    resData.data.login.tokenExpiration)
-            }
-            console.log(resData);
+            console.log(this.context);
+            this.context.login(
+                resData.data.login.token,
+                resData.data.login.userId,
+            );
+            console.log(this.context)
         })
         .catch(err=>{
             console.log(err)

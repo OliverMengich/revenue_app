@@ -55,6 +55,7 @@ module.exports= {
         })
     },
     createUser: async (args) => {
+        // console.log(args);
         return User.findOne({
             IDNumber: args.userInput.IDNumber, 
             email: args.userInput.email
@@ -71,6 +72,7 @@ module.exports= {
             }
             const user = new User({
                 ...args.userInput,
+                password: hashedPassword
             });
             return user.save()
         })
