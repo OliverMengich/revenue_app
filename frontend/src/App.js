@@ -1,6 +1,6 @@
 import './App.css';
 import React, {Component} from 'react';
-import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import {Route, BrowserRouter, Routes, Navigate} from 'react-router-dom';
 import Transactions from './pages/Admin/Transactions/transactions';
 import Home from './pages/Admin/Home/Users';
 // import Login from './pages/Admin/Login/login';
@@ -36,14 +36,13 @@ class App extends Component{
               logout: this.logout
           }}>
             <Routes>
-                <Route path='/' element={<Home/>}/>
-                {/* <Route path="/signup" element={}/> */}
-                <Route path="/users/login" element={<Login/>}/>
-                <Route path='/users/register' element={<Register/>} />
+                <Route path='/' element={this.state.token? <Home/>: <Login/> }/>
+                <Route path="/users/login" element={this.state.token?<Navigate to="/" /> :<Login/> }/>
+                <Route path='/users/register' element={ this.state.token?<Navigate to="/" /> :<Register/>} />
                 
                 <Route path='/file-submit' element={<FileHandler/>} />
-                <Route path="/admins/users/user-detail" element={ <UserDetail/>} />
-                <Route path='/admins/transactions' element={<Transactions/>} />
+                <Route path='/admins/users/user-detail' element={this.state.token?<Navigate to="/" /> : <UserDetail/>} />
+                <Route path='/admins/transactions' element={this.state.token?<Transactions/> : <Login/> } />
             </Routes>
           </AuthContext.Provider>
           

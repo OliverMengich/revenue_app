@@ -3,7 +3,7 @@ import './login.css';
 // import MainNavigation from "../../../components/Navigation/Navigations";
 import MainNavigation from "../../../components/Navigation/Navigations";
 import AuthContext from "../../../../context/auth-context";
-class  Login extends React.Component{
+class Login extends React.Component{
     constructor(props){
         super(props)
         this.idnumber = React.createRef();
@@ -53,10 +53,22 @@ class  Login extends React.Component{
         })
     }
     state={
-        passwordVissible: false
+        passwordVissible: false,
+        passwordType: 'password'
     }
     togglePasswordVissibilityHandler = ()=>{
-        this.setState({passwordVissible: !this.state.passwordVissible})
+        this.setState({
+            passwordVissible: !this.state.passwordVissible
+        })
+        if(!this.state.passwordVissible){
+            this.setState({
+                passwordType: 'text'
+            })
+        }else{
+            this.setState({
+                passwordType: 'password'
+            })
+        }
     }
     render(){
     return(
@@ -73,8 +85,8 @@ class  Login extends React.Component{
                             <div className="input-box">
                                 <span className="details">Password</span>
                                 <div className="password__section">
-                                    <input ref={this.password} type="password" placeholder="Enter password" required />
-                                    <i onClick={this.togglePasswordVissibilityHandler} className={ this.state.passwordVissible?"fa fa-eye": "fa fa-eye-slash"}></i>
+                                    <input ref={this.password} type={this.state.passwordType} placeholder="Enter password" required />
+                                    <i onClick={this.togglePasswordVissibilityHandler} className={ this.state.passwordVissible?"fa fa-eye-slash": "fa fa-eye"}></i>
                                 </div>
                             </div>
                             
