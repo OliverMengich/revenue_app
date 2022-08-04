@@ -58,7 +58,12 @@ module.exports = buildSchema(`
     }
     type AuthData{
         userId: ID!
-        token: String
+        token: String!
+        tokenExpiration: Int!
+    }
+    type adminAuthData{
+        administratorId: ID!
+        token: String!
         tokenExpiration: Int!
     }
     type adminsQuery{
@@ -66,8 +71,7 @@ module.exports = buildSchema(`
         getuser(userId: String!): User!
         getTransactions: [Transaction!]!
         getTransaction(transactionId: ID!): Transaction!
-        login(IDNumber: Int!, password: String!): AuthData!
-        adminlogin(StaffID: Int!, password: String!, role: String): AuthData
+        adminLogin(StaffID: Int!, password: String!): adminAuthData!
     }
     type adminsMutation{
         createUser(userInput: UserInput): User!

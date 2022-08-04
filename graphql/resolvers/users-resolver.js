@@ -1,4 +1,5 @@
 const { User, Transaction, jwt, bcrypt} = require('./essentials');
+const cryptojs = require('crypto-js');
 // require('dotenv')
 const {upload,fetchTransaction} = require('./utils');
 require('dotenv/config')
@@ -8,6 +9,10 @@ const credentials = {
 };
 const Africastalking = require('africastalking')(credentials);
 const sms = Africastalking.SMS;
+const encryptedText = (text)=>{
+    const passPhrase = process.env.ENCRYPTION_KEY
+    return cryptojs.AES.encrypt(text,passPhrase).toString()
+}
 module.exports= {
     login: async({IDNumber, password}) =>{
         const user = await User.findOne({IDNumber: IDNumber});
@@ -18,7 +23,9 @@ module.exports= {
         if(!isEqual){
             throw new Error('Password is incorrect');
         }
-        const token = jwt.sign({name: user.name, userId: user._id}, 'secret', {expiresIn: '1h'});
+        const token = jwt.sign({surname: user.surname, userId: user._id}, process.env.SECRET_KEY, {expiresIn: '1h'});
+        token = await encryptedText(token);
+        console.log(token)
         const tokenExpiration = 1;
         return {
             userId: user.id,
@@ -83,8 +90,12 @@ module.exports= {
             throw err;
         })
     },
-    getuserTransactions: async (args)=>{
-        const user = await User.findById(args.userId);
+    getuserTransactions: async (args,req)=>{
+        if(!req.isAuth){
+            throw new Error('UnAuthenticated');
+        }
+        const user = await User.findById(req.userId);
+
         if(!user){
             throw new Error("Invalid User Id")
         }
@@ -93,6 +104,9 @@ module.exports= {
         })
     },
     makeTransaction: async({transactionId})=>{
+        if(!req.isAuth){
+            throw new Error('UnAuthenticated');
+        }
         Transaction.findOneAndUpdate({_id: transactionId},{
             paid: true
         }).then(result=>{

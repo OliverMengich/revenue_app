@@ -1,7 +1,13 @@
 const AdminModel = require('../../models/admin-model');
+const cryptojs = require('crypto-js');
 // const Transaction = require('../../models/transactions-model');
 const { User,Transaction, jwt, bcrypt} = require('./essentials');
 const { upload, returnTransaction, fetchTransaction, findUser } = require('./utils');
+require('dotenv/config');
+const encryptedText = (text)=>{
+    const passPhrase = process.env.ENCRYPTION_KEY
+    return cryptojs.AES.encrypt(text,passPhrase).toString()
+}
 module.exports = {
     getTransactions: async () =>{
         console.log('here at getTransactions')
@@ -13,7 +19,10 @@ module.exports = {
             return returnTransaction(transaction)
         })
     },
-    createUser: async (args) => {
+    createUser: async (args,req) => {
+        if(!req.isAuth){
+            throw new Error('UnAuthenticated');
+        }
         return User.findOne({
             IDNumber: args.userInput.IDNumber, 
             phoneNumber: args.userInput.phoneNumber,
@@ -42,6 +51,9 @@ module.exports = {
         })
     },
     createAdmin: async (args)=>{
+        if(!req.isAuth){
+            throw new Error('UnAuthenticated');
+        }
         try {
             const checkAdmin= await AdminModel.findOne({StaffID: args.adminInput.StaffID});
             if(checkAdmin){
@@ -52,7 +64,8 @@ module.exports = {
                 throw new Error('Error hashing password');
             }
             const admin = new AdminModel({
-                ...args.adminInput
+                ...args.adminInput,
+                password: hashedPassword
             });
             await admin.save()
             return { ...admin._doc, id:admin.id,password: null}
@@ -61,6 +74,9 @@ module.exports = {
         }
     },
     getTransaction: async (args) =>{
+        if(!req.isAuth){
+            throw new Error('UnAuthenticated');
+        }
         const transaction = await Transaction.findById(args.transactionId);
         if(!transaction){
             throw new Error("Transaction not found")
@@ -79,7 +95,11 @@ module.exports = {
         if(!isEqual){
             throw new Error('Password is incorrect');
         }
-        const token = jwt.sign({administratorId: administrator.id}, 'secret', {expiresIn: '1h'});
+        let token = jwt.sign({
+            administratorId: administrator.id,
+        }, 'secret', {expiresIn: '1h'});
+        token = await encryptedText(token);
+        // console.log(token);
         const tokenExpiration = 1;
         return {
             administratorId: administrator.id,
@@ -88,6 +108,9 @@ module.exports = {
         }
     },
     createTransaction: async(args)=>{
+        if(!req.isAuth){
+            throw new Error('UnAuthenticated');
+        }
         const user = await User.findOne({_id: args.transaction.to})
         if(!user){
             throw new Error('No user');
@@ -107,6 +130,9 @@ module.exports = {
         }
     },
     getusers: async (args)=>{
+        if(!req.isAuth){
+            throw new Error('UnAuthenticated');
+        }
         const users = await User.find({});
         return users.map(user=>{
             return {
@@ -119,6 +145,9 @@ module.exports = {
         })
     },
     getuser:(args) =>{
+        if(!req.isAuth){
+            throw new Error('UnAuthenticated');
+        }
         return User.findById(args.userId)
         .then(user=>{
             if(!user){

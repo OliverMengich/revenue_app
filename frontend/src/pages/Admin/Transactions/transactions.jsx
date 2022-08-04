@@ -2,6 +2,7 @@ import React, {Component, Fragment} from "react";
 import MainNavigation from "../../components/Navigation/Navigations";
 import './transactions.css';
 // import UserDetail from "../../User detail/user-detail";
+import SearchBar from "../../components/SearchBar/SearchBar";
 class Transactions extends Component{
     state={
         transactions: [],
@@ -19,6 +20,7 @@ class Transactions extends Component{
                         _id
                         to{
                             othernames
+                            IDNumber
                         }
                         dueDate
                         amount
@@ -41,7 +43,7 @@ class Transactions extends Component{
             return res.json();
         })
         .then(resData=>{
-            // console.log(resData)
+            console.log(resData);
             this.setState({
                 transactions:resData.data.getTransactions
             })
@@ -53,10 +55,17 @@ class Transactions extends Component{
     userDetailNav= ()=>{
         console.log("you clicked me")
     }
+    searchUser=async(searchValue)=>{
+        console.log(typeof(parseInt(searchValue)));
+        const userTransactions =this.state.transactions.filter(e=>e.to.IDNumber===parseInt(searchValue));
+        console.log(userTransactions)
+        
+    }
     render() {
         return(
             <Fragment>
                 <MainNavigation/>
+                <SearchBar searchUser={this.searchUser}/>
                 {
                     this.state.transactions.map(transaction=>{
                         return(

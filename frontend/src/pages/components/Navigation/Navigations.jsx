@@ -20,7 +20,7 @@ const MainNavigation = ()=>{
                             </li>
                         </ul>
                         <div className="user">
-                            <button onClick={context.logout}  className="btn">
+                            <button onClick={context.logout} className="btn">
                                 LogOut
                             </button>
                         </div>
