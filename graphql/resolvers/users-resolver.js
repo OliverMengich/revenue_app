@@ -29,7 +29,7 @@ module.exports= {
         const tokenExpiration = 1;
         return {
             userId: user.id,
-            token: token,
+            usertoken: token,
             tokenExpiration: tokenExpiration
         }
     },

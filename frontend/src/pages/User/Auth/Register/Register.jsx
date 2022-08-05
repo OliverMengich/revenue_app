@@ -1,10 +1,9 @@
 import React from "react";
 // import { Navigate } from "react-router-dom";
 import './Register.css';
-import MainNavigation from "../../../components/Navigation/Navigations";
-// import ConfirmPhoneNumber from "../ConfirmPhoneNumber/confirm-phonenumber";
 import RegistrationContext from "../../../../context/user_registration-context";
 // import ConfirmPhoneNumber from "../ConfirmPhoneNumber/confirm-phonenumber";
+import UserNavigation from "../../components/Navigation/Navigations";
 class  Register extends React.Component{
     constructor(props){
         super(props);
@@ -177,7 +176,7 @@ class  Register extends React.Component{
                 }}
             >
                 <div className="register__page">
-                    <MainNavigation/>
+                    <UserNavigation />
                     <div className="register-container">
                         <form action="/register" onSubmit={this.registerSubmitHandler}>
                             <div className="user-details">

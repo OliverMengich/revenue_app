@@ -1,8 +1,9 @@
 import React from "react";
 import './login.css';
 // import MainNavigation from "../../../components/Navigation/Navigations";
-import MainNavigation from "../../../components/Navigation/Navigations";
+// import MainNavigation from "../../../components/Navigation/Navigations";
 import AuthContext from "../../../../context/auth-context";
+import UserNavigation from "../../components/Navigation/Navigations";
 class Login extends React.Component{
     constructor(props){
         super(props)
@@ -42,8 +43,8 @@ class Login extends React.Component{
             return res.json();
         }).then(resData=>{
             console.log(this.context);
-            this.context.login(
-                resData.data.login.token,
+            this.context.userLogin(
+                resData.data.login.usertoken,
                 resData.data.login.userId,
             );
             console.log(this.context)
@@ -74,7 +75,7 @@ class Login extends React.Component{
     return(
         <React.Fragment>
             <div className="register__page">
-                <MainNavigation/>
+                <UserNavigation/>
                 <div className="register-container">
                     <form onSubmit={this.loginSubmitHandler}>
                         <div className="user-details">

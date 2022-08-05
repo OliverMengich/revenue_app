@@ -3,7 +3,7 @@ import './Navigations.css'
 import { Link } from "react-router-dom";
 // import AuthContext from "../../../context/auth-context";
 import AuthContext from "../../../context/auth-context";
-const MainNavigation = ()=>{
+const MainNavigation = (props)=>{
     const context = useContext(AuthContext)
     return(
         <header>
@@ -30,9 +30,6 @@ const MainNavigation = ()=>{
             {
                 !context.token &&(
                     <div className="user">
-                        <button className="btn">
-                            <Link to='/users/register'>Signup</Link>
-                        </button>
                         <button className="btn">
                             <Link to='/users/login'>Login</Link>
                         </button>

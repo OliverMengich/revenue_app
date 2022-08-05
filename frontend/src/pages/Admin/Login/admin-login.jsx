@@ -46,7 +46,7 @@ class AdminLogin extends React.Component{
             console.log(this.context);
             this.context.login(
                 resData.data.login.token,
-                resData.data.login.userId,
+                resData.data.login.administratorId,
             );
             console.log(this.context)
         })
