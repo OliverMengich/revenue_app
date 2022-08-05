@@ -10,7 +10,6 @@ const encryptedText = (text)=>{
 }
 module.exports = {
     getTransactions: async () =>{
-        console.log('here at getTransactions')
         const transactions  = await Transaction.find()
         if(!transactions){
             throw new Error("No transactions found");
@@ -20,9 +19,9 @@ module.exports = {
         })
     },
     createUser: async (args,req) => {
-        if(!req.isAuth){
-            throw new Error('UnAuthenticated');
-        }
+        // if(!req.isAuth){
+        //     throw new Error('UnAuthenticated');
+        // }
         return User.findOne({
             IDNumber: args.userInput.IDNumber, 
             phoneNumber: args.userInput.phoneNumber,
@@ -40,6 +39,7 @@ module.exports = {
             }
             const user = new User({
                 ...args.userInput,
+                password: hashedPassword
             });
             return user.save()
         })
@@ -51,9 +51,9 @@ module.exports = {
         })
     },
     createAdmin: async (args)=>{
-        if(!req.isAuth){
-            throw new Error('UnAuthenticated');
-        }
+        // if(!req.isAuth){
+        //     throw new Error('UnAuthenticated');
+        // }
         try {
             const checkAdmin= await AdminModel.findOne({StaffID: args.adminInput.StaffID});
             if(checkAdmin){
@@ -74,9 +74,9 @@ module.exports = {
         }
     },
     getTransaction: async (args) =>{
-        if(!req.isAuth){
-            throw new Error('UnAuthenticated');
-        }
+        // if(!req.isAuth){
+        //     throw new Error('UnAuthenticated');
+        // }
         const transaction = await Transaction.findById(args.transactionId);
         if(!transaction){
             throw new Error("Transaction not found")
@@ -108,9 +108,9 @@ module.exports = {
         }
     },
     createTransaction: async(args)=>{
-        if(!req.isAuth){
-            throw new Error('UnAuthenticated');
-        }
+        // if(!req.isAuth){
+        //     throw new Error('UnAuthenticated');
+        // }
         const user = await User.findOne({_id: args.transaction.to})
         if(!user){
             throw new Error('No user');
@@ -130,9 +130,9 @@ module.exports = {
         }
     },
     getusers: async (args)=>{
-        if(!req.isAuth){
-            throw new Error('UnAuthenticated');
-        }
+        // if(!req.isAuth){
+        //     throw new Error('UnAuthenticated');
+        // }
         const users = await User.find({});
         return users.map(user=>{
             return {
@@ -145,9 +145,9 @@ module.exports = {
         })
     },
     getuser:(args) =>{
-        if(!req.isAuth){
-            throw new Error('UnAuthenticated');
-        }
+        // if(!req.isAuth){
+        //     throw new Error('UnAuthenticated');
+        // }
         return User.findById(args.userId)
         .then(user=>{
             if(!user){

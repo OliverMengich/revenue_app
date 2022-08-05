@@ -6,7 +6,7 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 class Transactions extends Component{
     state={
         transactions: [],
-        selectedTransaction: null
+        selectedTransaction: null,
     }
     componentDidMount(){
         this.fetchUsers()
@@ -56,10 +56,19 @@ class Transactions extends Component{
         console.log("you clicked me")
     }
     searchUser=async(searchValue)=>{
-        console.log(typeof(parseInt(searchValue)));
-        const userTransactions =this.state.transactions.filter(e=>e.to.IDNumber===parseInt(searchValue));
+        const userTransactions =this.state.transactions.filter(e=>(e.to.IDNumber).toString().includes(searchValue));
         console.log(userTransactions)
-        
+        if(searchValue.length !== 0){
+            if(userTransactions.length !==0){
+                await this.setState({
+                    transactions: userTransactions
+                })
+            }else{
+                await this.fetchUsers();
+            }
+        }else{
+            await this.fetchUsers();
+        }
     }
     render() {
         return(
