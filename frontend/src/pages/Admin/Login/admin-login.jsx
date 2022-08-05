@@ -1,8 +1,8 @@
 import React from "react";
 import './admin-login.css';
-// import MainNavigation from "../../../components/Navigation/Navigations";
-import MainNavigation from "../../../components/Navigation/Navigations";
-import AuthContext from "../../../../context/auth-context";
+
+import MainNavigation from "../../components/Navigation/Navigations";
+import AuthContext from "../../../context/auth-context";
 class AdminLogin extends React.Component{
     constructor(props){
         super(props)
@@ -30,7 +30,7 @@ class AdminLogin extends React.Component{
                 }
             `
         }
-        fetch('http://localhost:8000/admin',{
+        fetch('http://localhost:8000/admins',{
             method: 'POST',
             body: JSON.stringify(requestBody),
             headers: {

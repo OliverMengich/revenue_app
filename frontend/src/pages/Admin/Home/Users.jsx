@@ -119,7 +119,7 @@ class Home extends Component{
                     }
                     {
                         this.state.buttonClicked &&(
-                            <Modal _id={this.state.selectedUser._id} onConfirm={this.confirmModalHander} onCancel={this.cancelModalHandler}>
+                            <Modal _id={this.state.selectedUser._id} onConfirm={this.confirmModalHander} >
                                 <header className='modal__header'>
                                     <h1>{this.state.selectedUser.othernames}</h1>
                                 </header>
@@ -127,6 +127,10 @@ class Home extends Component{
                                     <img src={this.state.selectedUser.imageUrl} alt="user" />            
                                     <h3>{this.state.selectedUser.email}</h3>
                                     <h4>Latest Transaction: <span>{this.state.selectedUser.transactionsId[0].paid? 'Paid': 'Pending'}</span></h4>
+                                </section>
+                                <section className='modal__actions'>
+                                    <button onClick={this.cancelModalHandler} className='btn'>Cancel</button>
+                                    <button onClick={this.confirmModalHander(this.state.selectedUser._id)} className='btn'>View More</button>
                                 </section>
                             </Modal>
                         )

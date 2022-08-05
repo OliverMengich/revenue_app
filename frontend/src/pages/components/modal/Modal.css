@@ -30,6 +30,7 @@
 }
 .modal__content{
     padding: 1rem;
+    text-align: center;
 }
 .modal__content span{
     background-color: red;

@@ -68,7 +68,7 @@ module.exports = buildSchema(`
     }
     type adminsQuery{
         getusers: [User!]!
-        getuser(userId: String!): User!
+        getuser(IDNumber: Int!): User!
         getTransactions: [Transaction!]!
         getTransaction(transactionId: ID!): Transaction!
         adminLogin(StaffID: Int!, password: String!): adminAuthData!

@@ -1,0 +1,43 @@
+.add-transactions{
+    width:100%;
+    align-self:center;
+}
+.add-transactions .btn{
+    padding: 10px 0;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
+    color: black;
+    background: none;
+    border: 1px solid black;
+}
+.form-control{
+    text-align: center;
+    display: block;
+    max-width: 50%;
+    width: 100%;
+    align-self: center;
+}
+.form-control input{
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid green;
+    margin: 12px;
+    outline: none;
+    width: 100%;
+}
+.form-control button{
+    border: 1px solid black;
+    background: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 1rem;
+    margin-right: 10px;
+    
+}
+.btn span{
+    content: '\002B';
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+}

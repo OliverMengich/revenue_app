@@ -148,7 +148,9 @@ module.exports = {
         // if(!req.isAuth){
         //     throw new Error('UnAuthenticated');
         // }
-        return User.findById(args.userId)
+        return User.findOne({
+            IDNumber: args.IDNumber
+        })
         .then(user=>{
             if(!user){
                 throw new Error("no user found");
