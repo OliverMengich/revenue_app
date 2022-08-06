@@ -1,7 +1,6 @@
 import React from "react";
 import './login.css';
-// import MainNavigation from "../../../components/Navigation/Navigations";
-// import MainNavigation from "../../../components/Navigation/Navigations";
+
 import AuthContext from "../../../../context/auth-context";
 import UserNavigation from "../../components/Navigation/Navigations";
 class Login extends React.Component{
@@ -24,7 +23,7 @@ class Login extends React.Component{
             query: `query {
                 login(IDNumber: ${idnumber}, password: "${password}"){
                     userId
-                    token
+                    usertoken
                     tokenExpiration
                 }
             }`
@@ -42,8 +41,8 @@ class Login extends React.Component{
             }
             return res.json();
         }).then(resData=>{
-            console.log(this.context);
-            this.context.userLogin(
+            console.log(resData);
+            this.context.userlogin(
                 resData.data.login.usertoken,
                 resData.data.login.userId,
             );

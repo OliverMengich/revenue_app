@@ -23,7 +23,7 @@ const UserNavigation = (props)=>{
             {
                 context.usertoken &&(
                     <div className="user">
-                        <button className="btn">
+                        <button onClick={context.userlogout} className="btn">
                             LogOut
                         </button>
                     </div>

@@ -12,6 +12,9 @@
     background-color: rgb(243, 9, 9);
     padding: .5rem;
     border-radius: 10px;
+    border: none;
+    outline: none;
+    color: white;
     /* background-color: rgb(44, 228, 44); */
 }
 .body-contents .paid{

@@ -4,6 +4,7 @@ import './Register.css';
 import RegistrationContext from "../../../../context/user_registration-context";
 // import ConfirmPhoneNumber from "../ConfirmPhoneNumber/confirm-phonenumber";
 import UserNavigation from "../../components/Navigation/Navigations";
+import ConfirmPhoneNumber from "../ConfirmPhoneNumber/confirm-phonenumber";
 class  Register extends React.Component{
     constructor(props){
         super(props);
@@ -47,48 +48,6 @@ class  Register extends React.Component{
             userImage: e.target.files[0]
         })
     }
-    confirmNumberPassedHandler = (event) =>{
-        event.preventDefault();
-        if(this.passedCode.current.value === this.state.verificationCode){
-            //1. first register the user to our Database
-            let requestBody;
-            requestBody={
-                query: `
-                    mutation{
-                        createUser(userInput:{name:"${this.context.name}", email:"${this.context.email}",phoneNumber: "${this.context.phoneNumber}",IDNumber:${this.context.IDNumber}, age: ${this.context.age},dateOfBirth:"${this.context.dateOfBirth}", imageUrl:"${this.context.imageFileValue}", password:"${this.context.password}"}){
-                            name
-                        }
-                    }
-                `
-            }
-            fetch('http://localhost:8000/users',{
-                method:'POST',
-                body: JSON.stringify(requestBody),
-                headers: {
-                    'Content-Type': 'multipart/form-data; boundary=--------------------------28947758',
-                }
-            })
-            .then(res=>{
-                if(res.status !== 200 && res.status !==201){
-                    throw new Error("Failed");
-                }
-                return res.json();
-            }).then(resData=>{
-                console.log(resData);
-                this.setState({
-                    redirectToLogin: true,
-                })
-            })
-            .catch(err=>{
-                console.log(err)
-            })
-            //redirect user to login page
-            
-        }else{
-            alert("Verification code passed is not correct :( try again")
-            throw new Error("Verification Code Error")
-        }
-    }
     registerSubmitHandler = async (event)=>{
         event.preventDefault();
         const surname = this.surname.current.value;
@@ -121,40 +80,6 @@ class  Register extends React.Component{
                 dateOfBirth
             }
         });
-        let requestBody;
-        console.log(typeof(this.state.userImage));
-        
-        requestBody={
-            query: `
-                mutation{
-                    createUser(userInput:{surname:"${this.state.surname}",othernames:"${this.state.othernames}" email:"${this.state.email}",phoneNumber: "${this.state.phoneNumber}",IDNumber:${this.state.IDNumber}, age: ${this.state.age},dateOfBirth:"${this.state.dateOfBirth}", imageUrl:"${this.state.userImage.toString()}", password:"${this.state.password}"}){
-                        surname
-                    }
-                }
-            `
-        }
-        // console.log(requestBody);
-        fetch('http://localhost:8000/users',{
-            method:'POST',
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(res=>{
-            if(res.status !== 200 && res.status !==201){
-                throw new Error("Failed");
-            }
-            return res.json();
-        }).then(resData=>{
-            console.log(resData);
-            this.setState({
-                redirectToLogin: true,
-            })
-        })
-        .catch(err=>{
-            console.log(err)
-        })
     }
     render(){
     return(
@@ -175,75 +100,12 @@ class  Register extends React.Component{
                     imageFileValue: this.state.imageFileValue,
                 }}
             >
-                <div className="register__page">
-                    <UserNavigation />
-                    <div className="register-container">
-                        <form action="/register" onSubmit={this.registerSubmitHandler}>
-                            <div className="user-details">
-                                <div className="input-box">
-                                    <span className="details">SurName</span>
-                                    <input ref={this.surname}  type="text" placeholder="Kenyatta" required />
-                                </div>
-                                <div className="input-box">
-                                    <span className="details">Other Names</span>
-                                    <input ref={this.othernames} type="text" placeholder="Uhuru Muigai" required />
-                                </div>
-                                <div className="input-box">
-                                    <span className="details">ID Number</span>
-                                    <input ref={this.IDNumber} type="number" placeholder="Enter ID number" required />
-                                </div>
-                                <div className="input-box">
-                                    <span className="details">Email</span>
-                                    <input ref={this.email} type="email" placeholder="Enter your email" required />
-                                </div>
-                                <div className="input-box">
-                                    <label htmlFor="date">Choose an Image</label>
-                                    <input type="file" onChange={this.handleFileSubmit} capture accept="image/*"/>
-                                    <div className="image-section">
-                                        <img height="300" width="300" src={this.state.imageFileValue} alt="this_user" />
-                                    </div>
-                                </div>
-                                <div className="input-box">
-                                    <label htmlFor="date">Date Of Birth</label>
-                                    <input type="date" id="date" name="date" required placeholder="Date of birth" ref={this.dateOfBirth}/>
-                                </div>
-                                <div className="input-box">
-                                    <span className="details">Phone Number</span>
-                                    <input ref={this.phonenumber} type="text" pattern="[0-9]{4}[0-9]{6}" maxLength="10" placeholder="e.g 0710235787" />    
-                                </div>
-                                <div className="input-box">
-                                    <span className="details">Age</span>
-                                    <input ref={this.age} type="number" maxLength="2" placeholder="Enter your age" required />
-                                </div>
-                                
-                                <div className="input-box">
-                                    <label  className="details">Gender</label>
-                                    <select ref={this.genderselect} id="gender">
-                                        <option value="male">MALE</option>
-                                        <option value="female">FEMALE</option>
-                                        <option value="other">OTHER</option>
-                                    </select>
-                                </div>
-                                <div className="input-box">
-                                    <span className="details">Password</span>
-                                    <input ref={this.password} type="text" placeholder="Enter your password" required />
-                                </div>
-                                
-                                <div className="input-box">
-                                    <span className="details">Confirm Password</span>
-                                    <input ref={this.confirmpassword} type="text" placeholder="confirm password" required />
-                                </div>
-                            </div>
-                            <input className="button" type="submit" value="Register" />
-                        </form>
-                    </div>
-                </div>
-                {/* {
+                {
                     this.state.redirectToConfirmPhoneNumber? (
                         <ConfirmPhoneNumber />
                     ): (
                         <div className="register__page">
-                            <MainNavigation/>
+                            <UserNavigation/>
                             <div className="register-container">
                                 <form action="/register" onSubmit={this.registerSubmitHandler}>
                                     <div className="user-details">
@@ -306,7 +168,7 @@ class  Register extends React.Component{
                             </div>
                         </div>
                     )
-                } */}
+                }
             </RegistrationContext.Provider>
             
         </React.Fragment>

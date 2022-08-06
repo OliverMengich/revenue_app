@@ -23,13 +23,12 @@ module.exports= {
         if(!isEqual){
             throw new Error('Password is incorrect');
         }
-        const token = jwt.sign({surname: user.surname, userId: user._id}, process.env.SECRET_KEY, {expiresIn: '1h'});
-        token = await encryptedText(token);
-        console.log(token)
+        let token = jwt.sign({surname: user.surname, userId: user._id}, process.env.SECRET_KEY, {expiresIn: '1h'});
+        let usertoken = await encryptedText(token);
         const tokenExpiration = 1;
         return {
             userId: user.id,
-            usertoken: token,
+            usertoken,
             tokenExpiration: tokenExpiration
         }
     },
@@ -91,29 +90,37 @@ module.exports= {
         })
     },
     getuserTransactions: async (args,req)=>{
-        if(!req.isAuth){
+        // console.log('userID found is: '+req.userId);
+        if(!req.userIsAuth){
             throw new Error('UnAuthenticated');
         }
         const user = await User.findById(req.userId);
 
         if(!user){
-            throw new Error("Invalid User Id")
+            throw new Error("Invalid User Id");
         }
         return user.transactionsId.map(transactionId=>{
             return fetchTransaction(transactionId.toString())
         })
     },
-    makeTransaction: async({transactionId})=>{
-        if(!req.isAuth){
+    makeTransaction: ({transactionId,bankIdVerification})=>{
+        if(!req.userIsAuth){
             throw new Error('UnAuthenticated');
         }
-        Transaction.findOneAndUpdate({_id: transactionId},{
-            paid: true
+        return Transaction.findOneAndUpdate({_id: transactionId},{
+            paid: true,
+            bankIdVerification
         }).then(result=>{
             console.log(result);
+            return {
+                ...result,
+                id: result._id,
+                amount: result.amount,
+                paid: result.paid,
+            };
         })
         .catch(err=>{
-
+            console.log(err);
         })
     },
 }

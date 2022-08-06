@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv/config');
+const cryptojs = require('crypto-js');
 const decryptedText = (cipherText) =>{
     const passPhrase = process.env.ENCRYPTION_KEY;
     const bytes = cryptojs.AES.decrypt(cipherText,passPhrase);
@@ -9,29 +10,27 @@ const decryptedText = (cipherText) =>{
 module.exports = async(req,res,next)=>{
     const authHeader = req.get('Authorization');
     if(!authHeader){
-        req.isAuth = false;
+        req.userIsAuth = false;
         return next();
     }
     const token = authHeader.split(' ')[1];
-    console.log(token);
     if(!token || token ===' '){
-        req.isAuth = false;
+        req.userIsAuth = false;
         return next();
     }
     let decodedToken;
+    decodedToken = await decryptedText(token);
     try {
-        decodedToken = await decryptedText(token);
         decodedToken = await jwt.verify(decodedToken,process.env.SECRET_KEY);
-        console.log(decodedToken)
     } catch (error) {
-        req.isAuth = false;
+        req.userIsAuth = false;
         return next();
     }
-    if(!decodedToken.administratorId){
-        req.isAuth = false;
+    if(!decodedToken.userId){
+        req.userIsAuth = false;
         return next();
     }
-    req.isAuth = true;
-    req.userId= decodedToken.administratorId;
+    req.userIsAuth = true;
+    req.userId= decodedToken.userId;
     next();
 }

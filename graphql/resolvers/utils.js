@@ -10,10 +10,8 @@ const findUser = async (id) =>{
     }
 }
 const fetchTransaction = async (id)=>{
-    console.log(id);
     try{
         const transaction = await Transaction.findById(id);
-        console.log(transaction);
         return returnTransaction(transaction);
     }catch(err){
         throw err;

@@ -51,8 +51,11 @@ class App extends Component{
               administratorId: this.state.administratorId,
               login: this.login,
               logout: this.logout,
+
               usertoken: this.state.usertoken,
               userId: this.state.userId,
+              userlogin: this.userLogin,
+              userlogout: this.userlogout
           }}>
             <Routes>
               <Route path='/' element={this.state.token? <Home/>: <AdminLogin/> }/>

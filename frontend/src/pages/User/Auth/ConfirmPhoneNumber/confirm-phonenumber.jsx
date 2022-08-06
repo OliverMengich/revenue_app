@@ -72,7 +72,7 @@ class ConfirmPhoneNumber extends React.Component {
                 method:'POST',
                 body: JSON.stringify(requestBody),
                 headers: {
-                    'Content-Type': 'multipart/form-data; boundary=--------------------------28947758',
+                    'Content-Type': 'application/json',
                 }
             })
             .then(res=>{

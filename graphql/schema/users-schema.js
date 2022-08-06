@@ -22,6 +22,7 @@ module.exports = buildSchema(`
         updatedAt: String!
         dueDate: String!
         bankIdVerification: String
+        paid: Boolean
     }
     input UserInput{
         surname: String!
@@ -36,7 +37,7 @@ module.exports = buildSchema(`
     }
     type AuthData{
         userId: ID!
-        token: String
+        usertoken: String
         tokenExpiration: Int!
     }
     type Verification{
@@ -46,7 +47,7 @@ module.exports = buildSchema(`
     }
     type RootQuery{
         login(IDNumber: Int!, password: String!): AuthData!
-        getuserTransactions(userId: ID!): Transaction!
+        getuserTransactions(userId: ID!): [Transaction!]!
         verifyPhoneNumber(phoneNumber: String!): Verification
     }
     type RootMutation{

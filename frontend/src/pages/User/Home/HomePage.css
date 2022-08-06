@@ -7,3 +7,12 @@
     border-radius: 10px;
     
 }
+.user__nav p{
+    padding: 10px;
+    text-align: center;
+    background-color: rgb(255, 0, 0);
+    width: 150px;
+    margin: 0 auto;
+    color: white;
+    font-size: 1rem;
+}
