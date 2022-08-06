@@ -8,6 +8,7 @@ const adminsSchema = require('./graphql/schema/admins-schema');
 // add the resolvers 
 const{ usersResolver, adminsResolver} = require('./graphql/resolvers/resolvers');
 const userIsAuth = require('./middleware/user-is-auth');
+const mpesaAuth = require('./middleware/mpesa_oauthToken');
 const app = express();
 app.use(express.json());
 app.use((req,res,next)=>{
@@ -20,6 +21,7 @@ app.use((req,res,next)=>{
     next();
 });
 app.use(userIsAuth);
+app.use(mpesaAuth);
 app.use(express.static(__dirname + '/graphql'));
 app.use('/uploads', express.static('uploads'));
 app.get('/',(req,res,next)=>{
