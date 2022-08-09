@@ -63,8 +63,8 @@ class App extends Component{
               
               <Route path='/file-submit' element={<FileHandler/>} />
               <Route path='/admins/users/user-detail' element={this.state.token?<Navigate to="/" /> : <UserDetail/>} />
-              <Route path='/admins/transactions' element={this.state.token?<Transactions/> : <AdminLogin/> } />
-              {/* <Route path='/admins/transactions' element={<Transactions/> } /> */}
+              <Route path='/admins/transactions' element={this.state.token?<Transactions/> : <Navigate to='/'/> } />
+              {/* <Route path='/admins/tr' element={<Transactions/> } /> */}
               <Route path='*' element={<NotFound/>} />
               <Route path='/user/login' element={this.state.usertoken? <Navigate to='/user'/> :<Login/>}/>
               <Route path='/user' element={this.state.usertoken? <UserHomePage/> : <Navigate to='/user/login'/>}/>

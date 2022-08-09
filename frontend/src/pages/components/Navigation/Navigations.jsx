@@ -27,7 +27,7 @@ const MainNavigation = (props)=>{
                     </nav>
                 )
             }
-            {
+            {/* {
                 !context.token &&(
                     <div className="user">
                         <button className="btn">
@@ -35,8 +35,7 @@ const MainNavigation = (props)=>{
                         </button>
                     </div> 
                 )
-            }  
-              
+            }  */}
         </header>
     )
 };

@@ -5,7 +5,7 @@ import AuthContext from "../../../context/auth-context";
 class UserHomePage extends React.Component{
     state={
         transactions: [],
-        errorMessage: null
+        errorMessageVissible: false
     }
     static contextType= AuthContext;
     componentDidMount(){
@@ -44,25 +44,27 @@ class UserHomePage extends React.Component{
         }).then(resData=>{
             console.log(resData);
             this.setState({
-                transactions: resData.data.getuserTransactions
+                transactions: resData.data.getuserTransactions,
+                errorMessageVissible: false
             })
             console.log(this.state);
         })
         .catch(err=>{
             console.log(err)
-            // this.setState({
-            //     errorMessage: err.me
-            // })
+            this.setState({
+                errorMessageVissible: true
+            })
         })
         //redirect user to login page
         
     }
     payTransactionHandler=(transactionId,bankIdVerification)=>{
+        console.log(transactionId, bankIdVerification)
         let requestBody;
         requestBody={
             query: `
-                query{
-                    makeTransaction(transactionId: ${transactionId},bankIdVerification: ${bankIdVerification}){
+                mutation{
+                    makeTransaction(transactionId: "${transactionId}",bankIdVerification: "${bankIdVerification}"){
                         paid
                         amount
                         dueDate
@@ -87,16 +89,11 @@ class UserHomePage extends React.Component{
             return res.json();
         }).then(resData=>{
             console.log(resData);
-            this.setState({
-                transactions: resData.data.getuserTransactions
-            })
+            this.fetchUserTransactions();
             console.log(this.state);
         })
         .catch(err=>{
             console.log(err)
-            // this.setState({
-            //     errorMessage: err.me
-            // })
         })
     }
     render() {
@@ -105,12 +102,17 @@ class UserHomePage extends React.Component{
                 <UserNavigation/>
                 <div className="user__nav">
                     <h1>My Transactions</h1>
-                    <p>Error encountered</p>
+                    {
+                        this.state.errorMessageVissible &&(
+                            <p>Error encountered: Incorrect Password</p>
+                        )
+                    }
+                    
                 </div>
                 {
                     this.state.transactions.map((transaction)=>{
                         return(
-                            <div className="body-contents">
+                            <div key={transaction._id} className="body-contents">
                                 <h3>Amount: {transaction.amount}</h3>
                                 <div>
                                     <h3>DueDate: {transaction.dueDate}</h3>
@@ -119,7 +121,7 @@ class UserHomePage extends React.Component{
                                     transaction.paid?(
                                         <h3 className="paid">Paid</h3>
                                     ):(
-                                        <button onClick={this.payTransactionHandler(transaction._id)} className='pending'>Click to pay</button>
+                                        <button style={{cursor: "pointer"}} onClick={this.payTransactionHandler(transaction._id,"Hello, world")} className='pending'>Click to pay</button>
                                     )
                                 }
                                 

@@ -23,7 +23,7 @@ class AdminLogin extends React.Component{
             query: `
                 query {
                     adminLogin(StaffID: ${staffId}, password: "${password}"){
-                        userId
+                        administratorId
                         token
                         tokenExpiration
                     }
@@ -43,10 +43,11 @@ class AdminLogin extends React.Component{
             }
             return res.json();
         }).then(resData=>{
+            console.log(resData);
             console.log(this.context);
             this.context.login(
-                resData.data.login.token,
-                resData.data.login.administratorId,
+                resData.data.adminLogin.token,
+                resData.data.adminLogin.administratorId,
             );
             console.log(this.context)
         })

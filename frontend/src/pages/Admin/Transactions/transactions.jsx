@@ -113,6 +113,10 @@ class Transactions extends Component{
         })
         .then(resData=>{
             console.log(resData);
+            // this.fetchUsers()
+            this.setState({
+                creatingTransaction: !this.state.creatingTransaction
+            })
         })
         .catch(err=>{
             console.log(err);
@@ -222,7 +226,7 @@ class Transactions extends Component{
                                     )
                                 }
                             </section>
-                            <section className='modal__actions'>
+                            <section onClick={e=>{this.setState({creatingTransaction: !this.state.creatingTransaction})}} className='modal__actions'>
                                 <button className='btn'>Cancel</button>
                             </section>
                         </Modal>

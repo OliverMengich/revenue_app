@@ -7,9 +7,11 @@ const usersSchema = require('./graphql/schema/users-schema');
 const adminsSchema = require('./graphql/schema/admins-schema');
 // add the resolvers 
 const{ usersResolver, adminsResolver} = require('./graphql/resolvers/resolvers');
+//add the middlewares required
 const userIsAuth = require('./middleware/user-is-auth');
 const mpesaAuth = require('./middleware/mpesa_oauthToken');
 const app = express();
+//pass json data
 app.use(express.json());
 app.use((req,res,next)=>{
     res.setHeader("Access-Control-Allow-Origin", "*") //only the localhost is whitelisted to access our API

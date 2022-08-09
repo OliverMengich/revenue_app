@@ -2,7 +2,8 @@ const { User, Transaction, jwt, bcrypt} = require('./essentials');
 const cryptojs = require('crypto-js');
 // require('dotenv')
 const {upload,fetchTransaction} = require('./utils');
-require('dotenv/config')
+require('dotenv/config');
+const axios = require('axios');
 const credentials = {
     apiKey: process.env.APIKEY,// use your sandbox app API key for development in the test environment
     username: process.env.USERNAME,// use 'sandbox' for development in the test environment
@@ -21,7 +22,8 @@ module.exports= {
         }
         const isEqual = await bcrypt.compare(password, user.password);
         if(!isEqual){
-            throw new Error('Password is incorrect');
+            // throw new Error('Password is incorrect');
+            return 'Password is incorrect'
         }
         let token = jwt.sign({surname: user.surname, userId: user._id}, process.env.SECRET_KEY, {expiresIn: '1h'});
         let usertoken = await encryptedText(token);
@@ -104,7 +106,6 @@ module.exports= {
         })
     },
     lipaNaMpesaOnline: async (token,res)=>{
-        let token = token;
         let auth = `Bearer ${token}`;
         
 
@@ -161,11 +162,11 @@ module.exports= {
         if(!req.userIsAuth){
             throw new Error('UnAuthenticated');
         }
-        if(!req.mpesatoken){
-            throw new Error('MPESA')
-        }
-        let data = await lipaNaMpesaOnline(req)
-        if(data){
+        // if(!req.mpesatoken){
+        //     throw new Error('MPESA')
+        // }
+        // let data = await lipaNaMpesaOnline(req)
+        // if(data){
             return Transaction.findOneAndUpdate({_id: args.transactionId},{
                 paid: true,
                 bankIdVerification: args.bankIdVerification
@@ -181,6 +182,6 @@ module.exports= {
             .catch(err=>{
                 console.log(err);
             })
-        }
+        // }
     },
 }

@@ -36,25 +36,33 @@ class Login extends React.Component{
             }
         })
         .then(res=>{
+            console.log(res);
             if(res.status !== 200 && res.status !==201){
                 throw new Error("Failed");
             }
             return res.json();
         }).then(resData=>{
-            console.log(resData);
+            this.setState({
+                errorMessageVissible: false
+            })
+            // console.log(resData.errors);
             this.context.userlogin(
                 resData.data.login.usertoken,
                 resData.data.login.userId,
             );
-            console.log(this.context)
+            // console.log(this.context)
         })
         .catch(err=>{
-            console.log(err)
+            // console.log(err)
+            this.setState({
+                errorMessageVissible: true
+            })
         })
     }
     state={
         passwordVissible: false,
-        passwordType: 'password'
+        passwordType: 'password',
+        errorMessageVissible: false 
     }
     togglePasswordVissibilityHandler = ()=>{
         this.setState({
@@ -75,7 +83,14 @@ class Login extends React.Component{
         <React.Fragment>
             <div className="register__page">
                 <UserNavigation/>
+                {
+                    this.state.errorMessageVissible &&(
+                        <p>Error encountered: Try Again</p>
+                    )
+                }
+                
                 <div className="register-container">
+                    
                     <form onSubmit={this.loginSubmitHandler}>
                         <div className="user-details">
                             <div className="input-box">

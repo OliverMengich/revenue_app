@@ -1,6 +1,6 @@
 require('dotenv/config');
 const axios = require('axios');
-module.exports=(req,res,next) =>{
+module.exports=async (req,res,next) =>{
 
     let consumer_key = process.env.consumer_key;
     let consumer_secret = process.env.consumer_secret;
@@ -19,18 +19,15 @@ module.exports=(req,res,next) =>{
                 "Authorization":auth
             }
         });
-
-        req.mpesatoken = data['access_token'];
-
-        return next();
+        if(data){
+            req.mpesatoken = data['access_token'];
+            return next();
+        }
 
     }catch(err){
-
-        return res.send({
-            success:false,
-            message:err['response']['statusText']
-        });
-
+        req.mpesatoken=null;
+        // console.log(err);
+        return next();
     }
     
 };
